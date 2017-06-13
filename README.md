@@ -9,13 +9,14 @@ Run `pantheon-files-colorize` without parameters to see the list of supported co
 ## Examples
 
 ### Taint code with TODOs or FIXMEs
-`for file in ./*; do (grep -q TODO "$file" || grep -q FIXME "$file") && pantheon-files-colorize red "$file"`
+`for file in ./*; do (grep -q TODO "$file" || grep -q FIXME "$file") && pantheon-files-colorize red "$file"; done`
 
 ### Get horrified by the sizes of binaries in /usr/bin
+(as well as the amount of stuff in there; due to the sheer number of files this takes a while)
 ```
 for file in /usr/bin/*; do
     size_in_bytes=$(stat --format='%s' "$file")
-    if [ "$size_in_bytes" -lt 100000]; then
+    if [ "$size_in_bytes" -lt 100000 ]; then
         pantheon-files-colorize green "$file" # under 100kb
     elif [ "$size_in_bytes" -lt 1000000 ]; then
         pantheon-files-colorize yellow "$file" # under 1Mb
