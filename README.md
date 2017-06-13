@@ -1,4 +1,4 @@
-#Programmatically colorize files in elementary OS
+# Programmatically colorize files in elementary OS
 
 Want to highlight files that fit a certain criteria for later use, and not satisified with search? Then this script is for you.
 
