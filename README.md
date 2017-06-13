@@ -2,7 +2,7 @@
 
 Want to highlight files that fit a certain criteria for later use, and not satisified with search? Then this script is for you.
 
-`pantheon-files-colorize` is a command that lets you set display colors for arbitrary files that will be displayed in elementary OS file manager, `pantheon-files`. You can use it from shell scripts or any other programs to highlight files based on arbitrarily complex criteria.
+`pantheon-files-colorize` is a command that lets you set colors for arbitrary files that will be displayed in elementary OS file manager, `pantheon-files`. You can use it from shell scripts or any other programs to highlight files based on arbitrarily complex criteria.
 
 Run `pantheon-files-colorize` without parameters to see the list of supported colors and detailed usage instructions.
 
