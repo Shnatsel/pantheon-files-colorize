@@ -1,0 +1,64 @@
+#!/usr/bin/env python3
+
+color_table = {'none': 0,
+              'yellow': 1,
+              'orange': 2,
+              'brown': 3,
+              'green': 4,
+              'blue': 5,
+              'purple': 6,
+              'red': 7,
+              'light_grey': 8,
+              'dark_grey': 9
+}
+
+isascii = lambda s: len(s) == len(s.encode())
+import sys
+
+def usage():
+    print("Usage: pantheon-files-colorize COLOR [FILE]...")
+    print("Colorize files for display in pantheon-files")
+    print("")
+    print("FILE can be either a path (/path/to/file) or a URI (uri://me@example.com/whatever)")
+    print("The program checks that files specified as paths exist. This is not done for URIs.")
+    print("")
+    print("Recognized colors are: none, yellow, orange, brown, green, purple, red, light_grey, dark_grey")
+    print("")
+    print("Examples:")
+    print("  pantheon-files-colorize blue ~/Documents/report.odt")
+    print("  pantheon-files-colorize red file://bin/cat")
+    print("  pantheon-files-colorize purple ftp://ftp.funet.fi/pub/standards/RFC/rfc959.txt")
+    sys.exit(1)
+
+if len(sys.argv) < 3 or sys.argv[1] == '-h' or sys.argv[1] == '--help':
+    usage()
+
+color_name = sys.argv[1]
+color_number = color_table[color_name]
+input_file_names = sys.argv[2:]
+
+import os
+import urllib.parse
+
+uris = []
+for input_name in input_file_names:
+    if '://' in input_name and isascii(input_name):
+        uris.append(input_name) # already a URI
+    else:
+        full_filename = os.path.abspath(input_name)
+        if not os.path.exists(full_filename):
+            print("Error: file " + input_name + " does not exist")
+            sys.exit(1)
+        uris.append("file://" + urllib.parse.quote(os.path.abspath(input_name)))
+
+final_array = []
+for uri in uris:
+    final_array.append((uri, "unused_mimetype_field", "123", str(color_number)))
+
+import dbus
+session_bus = dbus.SessionBus()
+proxy = session_bus.get_object('org.pantheon.files.db', '/org/pantheon/files/db')
+interface = dbus.Interface(proxy,dbus_interface='org.pantheon.files.db')
+if not interface.RecordUris(final_array,"unused_folder_field"):
+    print("pantheon-files daemon reported an error!")
+    sys.exit(1)
