@@ -49,7 +49,7 @@ for input_name in input_file_names:
         if not os.path.exists(full_filename):
             print("Error: file " + input_name + " does not exist")
             sys.exit(1)
-        uris.append("file://" + urllib.parse.quote(os.path.abspath(input_name)))
+        uris.append("file://" + urllib.parse.quote(os.path.abspath(input_name),safe="/(),@$&!"))
 
 final_array = []
 for uri in uris:
